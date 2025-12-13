@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NBA - Scorzy Generator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html" class="back-link">← Back to Home</a>
+            <h1>🏀 NBA</h1>
+            <p class="subtitle">Generate Title, Description & Tags</p>
+        </header>
+
+        <div class="content-wrapper">
+            <div class="form-section">
+                <h2>Enter Game Details</h2>
+                <form id="gameForm">
+                    <div class="form-group">
+                        <label for="teamA">Team A</label>
+                        <input type="text" id="teamA" required placeholder="e.g., Los Angeles Lakers">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="teamB">Team B</label>
+                        <input type="text" id="teamB" required placeholder="e.g., Boston Celtics">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="date">Date</label>
+                        <input type="text" id="date" required placeholder="e.g., December 13, 2025">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="time">Time</label>
+                        <input type="text" id="time" required placeholder="e.g., 7:00 PM EST">
+                    </div>
+
+                    <button type="submit" class="btn-generate">Generate Content</button>
+                </form>
+            </div>
+
+            <div class="output-section" id="outputSection" style="display: none;">
+                <h2>Generated Content</h2>
+                
+                <div class="output-box">
+                    <div class="output-header">
+                        <h3>📝 Title</h3>
+                        <button class="btn-copy" onclick="copyToClipboard('titleOutput')">Copy</button>
+                    </div>
+                    <div id="titleOutput" class="output-content"></div>
+                </div>
+
+                <div class="output-box">
+                    <div class="output-header">
+                        <h3>📄 Description</h3>
+                        <button class="btn-copy" onclick="copyToClipboard('descriptionOutput')">Copy</button>
+                    </div>
+                    <div id="descriptionOutput" class="output-content"></div>
+                </div>
+
+                <div class="output-box">
+                    <div class="output-header">
+                        <h3>🏷️ Tags</h3>
+                    </div>
+                    <div id="tagsOutput" class="tags-container"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        const templates = {
+            title: `{Team A} vs {Team B} LIVE | NBA Live Score | {Date}`,
+            
+            description: `{Team A} vs {Team B} LIVE score updates and
+play-by-play coverage on Scorzy for NBA.
+Follow real-time scoring, stats, and possession-by-possession updates.
+
+🆚 Match: {Team A} vs {Team B}
+🏀 League: NBA
+📅 Date: {Date}
+⏰ Time: {Time}
+📍 Coverage: Live Score & Play-by-Play
+
+Scorzy brings you fast, accurate NBA live score coverage with
+real-time updates, team stats, momentum tracking, and key game moments.
+Stay connected throughout the game with continuous scoring updates
+and live commentary-style coverage.
+
+📊 This Scorzy LIVE stream includes:
+✔ NBA live score updates
+✔ Play-by-play tracking
+✔ Team & player statistics
+✔ Possession and momentum updates
+✔ Live match flow coverage
+
+🔍 Search Keywords:
+{Team A} vs {Team B} live score
+NBA live
+{Team A} vs {Team B} today
+NBA live score
+NBA live updates
+
+#️⃣ Hashtags:
+#Scorzy #NBA #NBABasketball #{Team A}
+#{Team B} #Basketball #LiveScore
+
+⚠️ This stream provides LIVE SCORE UPDATES & PLAY-BY-PLAY only.
+❌ No TV footage, no highlights, no copyrighted content.
+✅ 100% original Scorzy scoreboard-based coverage.`,
+
+            tags: [
+                `nba live score`,
+                `{Team A} vs {Team B} live score`
+            ]
+        };
+
+        initializePage(templates);
+    </script>
+</body>
+</html>
