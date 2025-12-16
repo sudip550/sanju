@@ -1,3 +1,73 @@
+// Function to convert IST to EST
+function convertISTtoEST(istTime) {
+    // IST is UTC+5:30, EST is UTC-5:00
+    // Difference: IST is 10 hours 30 minutes ahead of EST
+    
+    // Parse the time (supports formats like "7:00 PM", "19:00", "7 PM")
+    const timeMatch = istTime.match(/(\d{1,2}):(\d{2})\s*(AM|PM)?/i);
+    if (!timeMatch) {
+        // If no match, try format without minutes like "7 PM"
+        const simpleMatch = istTime.match(/(\d{1,2})\s*(AM|PM)/i);
+        if (!simpleMatch) return istTime; // Return original if can't parse
+        
+        let hours = parseInt(simpleMatch[1]);
+        const period = simpleMatch[2].toUpperCase();
+        
+        // Convert to 24-hour format
+        if (period === 'PM' && hours !== 12) hours += 12;
+        if (period === 'AM' && hours === 12) hours = 0;
+        
+        // Subtract 10 hours 30 minutes
+        hours -= 10;
+        let minutes = -30;
+        
+        if (minutes < 0) {
+            hours -= 1;
+            minutes = 30;
+        }
+        
+        // Handle day overflow
+        if (hours < 0) hours += 24;
+        if (hours >= 24) hours -= 24;
+        
+        // Convert back to 12-hour format
+        const estPeriod = hours >= 12 ? 'PM' : 'AM';
+        let estHours = hours % 12;
+        if (estHours === 0) estHours = 12;
+        
+        return `${estHours}:${minutes.toString().padStart(2, '0')} ${estPeriod} EST`;
+    }
+    
+    let hours = parseInt(timeMatch[1]);
+    let minutes = parseInt(timeMatch[2]);
+    const period = timeMatch[3] ? timeMatch[3].toUpperCase() : null;
+    
+    // Convert to 24-hour format if AM/PM is specified
+    if (period) {
+        if (period === 'PM' && hours !== 12) hours += 12;
+        if (period === 'AM' && hours === 12) hours = 0;
+    }
+    
+    // Subtract 10 hours 30 minutes for EST
+    minutes -= 30;
+    if (minutes < 0) {
+        hours -= 1;
+        minutes += 60;
+    }
+    hours -= 10;
+    
+    // Handle day overflow
+    if (hours < 0) hours += 24;
+    if (hours >= 24) hours -= 24;
+    
+    // Convert back to 12-hour format
+    const estPeriod = hours >= 12 ? 'PM' : 'AM';
+    let estHours = hours % 12;
+    if (estHours === 0) estHours = 12;
+    
+    return `${estHours}:${minutes.toString().padStart(2, '0')} ${estPeriod} EST`;
+}
+
 // Global function to initialize page with templates
 function initializePage(templates) {
     const form = document.getElementById('gameForm');
@@ -10,7 +80,10 @@ function initializePage(templates) {
         const teamA = document.getElementById('teamA').value.trim();
         const teamB = document.getElementById('teamB').value.trim();
         const date = document.getElementById('date').value.trim();
-        const time = document.getElementById('time').value.trim();
+        const timeIST = document.getElementById('time').value.trim();
+        
+        // Convert IST to EST
+        const time = convertISTtoEST(timeIST);
         
         // Generate content
         const title = generateContent(templates.title, teamA, teamB, date, time);
