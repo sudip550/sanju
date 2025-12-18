@@ -282,6 +282,28 @@ footer {
     background: #764ba2;
 }
 
+/* Bulk Match Container Styles */
+.bulk-match-container {
+    border: 3px solid #667eea;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 30px;
+    background: #f8f9fa;
+    box-shadow: 0 3px 10px rgba(102, 126, 234, 0.2);
+}
+
+.bulk-match-container:last-child {
+    margin-bottom: 0;
+}
+
+.match-header {
+    color: #667eea;
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #667eea;
+}
+
 /* Tags Container Styles */
 .tags-container {
     display: flex;
