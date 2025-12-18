@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NCAA Basketball - Combined Bulk Generator</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .bulk-input-container textarea {
+            width: 100%;
+            min-height: 350px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'Courier New', monospace;
+            transition: all 0.3s ease;
+            resize: vertical;
+        }
+        
+        .bulk-input-container textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .format-hint {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .format-hint h4 {
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+        
+        .format-hint pre {
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 0.9rem;
+        }
+        
+        .feature-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-left: 10px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html" class="back-link">← Back to Home</a>
+            <h1>🏀 NCAA Basketball - Combined Bulk Generator</h1>
+            <p class="subtitle">Generate Men's & Women's Matches Together <span class="feature-badge">✨ SMART</span></p>
+        </header>
+
+        <div class="content-wrapper">
+            <div class="form-section">
+                <h2>Enter Multiple Matches</h2>
+                
+                <div class="format-hint">
+                    <h4>📋 Format Instructions:</h4>
+                    <pre>date = December 12, 2025
+⏰ 07:30 AM IST | 👩 WOMEN | Team A @ Team B
+⏰ 08:30 AM IST | 👨 MEN | Team C @ Team D
+⏰ 09:00 AM IST | 👩 WOMEN | Team E @ Team F</pre>
+                    <p style="margin-top: 10px; font-size: 0.9rem; color: #555;">
+                        <strong>✨ Smart Detection:</strong><br>
+                        • Start with a date line<br>
+                        • Each match on a new line with ⏰, time, and teams separated by @<br>
+                        • Use 👩 WOMEN or 👨 MEN to indicate the league<br>
+                        • System automatically applies correct template based on gender indicator
+                    </p>
+                </div>
+                
+                <form id="gameForm">
+                    <div class="form-group bulk-input-container">
+                        <label for="bulkInput">Paste Match Details (Men's & Women's Mixed)</label>
+                        <textarea id="bulkInput" placeholder="Paste your matches here...
+
+Example:
+date = December 12, 2025
+⏰ 07:30 AM IST | 👩 WOMEN | Northern Arizona Lumberjacks @ Cal State Northridge Matadors
+⏰ 07:30 AM IST | 👩 WOMEN | Eastern Washington Eagles @ UC Santa Barbara Gauchos
+⏰ 08:30 AM IST | 👨 MEN | Pepperdine Waves @ Long Beach State Beach
+⏰ 08:30 AM IST | 👩 WOMEN | Cal Poly Mustangs @ USC Trojans"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-generate">Generate All Matches</button>
+                </form>
+            </div>
+
+            <div class="output-section" id="outputSection" style="display: none;">
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        const templates = {
+            men: {
+                title: `{Team A} Vs {Team B} Live | NCAA Men's Basketball | PLAY BY PLAY | SCOREBOARD`,
+                
+                description: `{Team A} vs {Team B} LIVE score updates and
+play-by-play coverage on Scorzy for NCAA Men's Basketball.
+Follow real-time scoring, stats, and possession-by-possession updates.
+
+🆚 Match: {Team A} vs {Team B}
+🏀 League: NCAA Men's Basketball
+📅 Date: {Date}
+⏰ Time: {Time}
+📍 Coverage: Live Score & Play-by-Play
+
+Scorzy brings you fast, accurate NCAA live score coverage with
+real-time updates, team stats, momentum tracking, and key game moments.
+Stay connected throughout the game with continuous scoring updates
+and live commentary-style coverage.
+
+📊 This Scorzy LIVE stream includes:
+✔ NCAA live score updates
+✔ Play-by-play tracking
+✔ Team & player statistics
+✔ Possession and momentum updates
+✔ Live match flow coverage
+
+🔍 Search Keywords:
+{Team A} vs {Team B} live score
+NCAA men's basketball live
+{Team A} vs {Team B} today
+College basketball live score
+NCAAM live updates
+
+#️⃣ Hashtags:
+#Scorzy #NCAAM #NCAABasketball #{Team A}
+#{Team B} #CollegeBasketball #LiveScore
+
+⚠️ This stream provides LIVE SCORE UPDATES & PLAY-BY-PLAY only.
+❌ No TV footage, no highlights, no copyrighted content.
+✅ 100% original Scorzy scoreboard-based coverage.`,
+
+                tags: [
+                    `ncaa college basketball live score`,
+                    `{Team A} vs {Team B} live score`,
+                    `{Team A} Basketball Live`,
+                    `{Team B} Basketball Live`,
+                    `{Team A} Vs {Team B}`
+                ]
+            },
+            women: {
+                title: `{Team A} Vs {Team B} Live | NCAA Women's Basketball | PLAY BY PLAY | SCOREBOARD`,
+                
+                description: `{Team A} vs {Team B} LIVE score updates and
+play-by-play coverage on Scorzy for NCAA Women's Basketball.
+Follow real-time scoring, stats, and possession-by-possession updates.
+
+🆚 Match: {Team A} vs {Team B}
+🏀 League: NCAA Women's Basketball
+📅 Date: {Date}
+⏰ Time: {Time}
+📍 Coverage: Live Score & Play-by-Play
+
+Scorzy brings you fast, accurate NCAA live score coverage with
+real-time updates, team stats, momentum tracking, and key game moments.
+Stay connected throughout the game with continuous scoring updates
+and live commentary-style coverage.
+
+📊 This Scorzy LIVE stream includes:
+✔ NCAA live score updates
+✔ Play-by-play tracking
+✔ Team & player statistics
+✔ Possession and momentum updates
+✔ Live match flow coverage
+
+🔍 Search Keywords:
+{Team A} vs {Team B} live score
+NCAA women's basketball live
+{Team A} vs {Team B} today
+College basketball live score
+NCAAW live updates
+
+#️⃣ Hashtags:
+#Scorzy #NCAAW #NCAABasketball #{Team A}
+#{Team B} #CollegeBasketball #LiveScore #WomensBasketball
+
+⚠️ This stream provides LIVE SCORE UPDATES & PLAY-BY-PLAY only.
+❌ No TV footage, no highlights, no copyrighted content.
+✅ 100% original Scorzy scoreboard-based coverage.`,
+
+                tags: [
+                    `ncaa college basketball live score`,
+                    `{Team A} vs {Team B} live score`,
+                    `{Team A} Basketball Live`,
+                    `{Team B} Basketball Live`,
+                    `{Team A} Vs {Team B}`
+                ]
+            }
+        };
+
+        initializePage(templates);
+    </script>
+</body>
+</html>
