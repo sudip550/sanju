@@ -3,70 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NBA - Scorzy Generator</title>
+    <title>NBA - Bulk Generator</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        .bulk-input-container textarea {
+            width: 100%;
+            min-height: 300px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'Courier New', monospace;
+            transition: all 0.3s ease;
+            resize: vertical;
+        }
+        
+        .bulk-input-container textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .format-hint {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .format-hint h4 {
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+        
+        .format-hint pre {
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <a href="index.html" class="back-link">← Back to Home</a>
-            <h1>🏀 NBA</h1>
-            <p class="subtitle">Generate Title, Description & Tags</p>
+            <a href="nba.html" class="back-link">← Back to Single Mode</a>
+            <h1>🏀 NBA - Bulk Generator</h1>
+            <p class="subtitle">Generate Multiple Matches at Once</p>
         </header>
 
         <div class="content-wrapper">
             <div class="form-section">
-                <h2>Enter Game Details</h2>
+                <h2>Enter Multiple Matches</h2>
+                
+                <div class="format-hint">
+                    <h4>📋 Format Instructions:</h4>
+                    <pre>date = December 12, 2025
+⏰ 07:30 AM IST | NBA | Team A @ Team B
+⏰ 08:30 AM IST | NBA | Team C @ Team D</pre>
+                    <p style="margin-top: 10px; font-size: 0.9rem; color: #555;">
+                        • Start with a date line<br>
+                        • Each match on a new line with ⏰, time, and teams separated by @<br>
+                        • League indicator is optional
+                    </p>
+                </div>
+                
                 <form id="gameForm">
-                    <div class="form-group">
-                        <label for="teamA">Team A</label>
-                        <input type="text" id="teamA" required placeholder="e.g., Los Angeles Lakers">
+                    <div class="form-group bulk-input-container">
+                        <label for="bulkInput">Paste Match Details</label>
+                        <textarea id="bulkInput" placeholder="Paste your matches here...
+
+Example:
+date = December 12, 2025
+⏰ 07:30 AM IST | NBA | Los Angeles Lakers @ Boston Celtics
+⏰ 08:30 AM IST | NBA | Golden State Warriors @ Miami Heat"></textarea>
                     </div>
 
-                    <div class="form-group">
-                        <label for="teamB">Team B</label>
-                        <input type="text" id="teamB" required placeholder="e.g., Boston Celtics">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="date">Date</label>
-                        <input type="text" id="date" required placeholder="e.g., December 13, 2025">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="time">Time (IST)</label>
-                        <input type="text" id="time" required placeholder="e.g., 7:00 PM IST (auto-converts to EST)">
-                    </div>
-
-                    <button type="submit" class="btn-generate">Generate Content</button>
+                    <button type="submit" class="btn-generate">Generate All Matches</button>
                 </form>
             </div>
 
             <div class="output-section" id="outputSection" style="display: none;">
-                <h2>Generated Content</h2>
-                
-                <div class="output-box">
-                    <div class="output-header">
-                        <h3>📝 Title</h3>
-                        <button class="btn-copy" onclick="copyToClipboard('titleOutput')">Copy</button>
-                    </div>
-                    <div id="titleOutput" class="output-content"></div>
-                </div>
-
-                <div class="output-box">
-                    <div class="output-header">
-                        <h3>📄 Description</h3>
-                        <button class="btn-copy" onclick="copyToClipboard('descriptionOutput')">Copy</button>
-                    </div>
-                    <div id="descriptionOutput" class="output-content"></div>
-                </div>
-
-                <div class="output-box">
-                    <div class="output-header">
-                        <h3>🏷️ Tags</h3>
-                    </div>
-                    <div id="tagsOutput" class="tags-container"></div>
-                </div>
             </div>
         </div>
     </div>
@@ -76,7 +95,6 @@
         const templates = {
             title: `{Team A} Vs {Team B} Live | NBA | PLAY BY PLAY | SCOREBOARD`,
             
-            description: `{Team A} vs {Team B} LIVE score updates and
 play-by-play coverage on Scorzy for NBA.
 Follow real-time scoring, stats, and possession-by-possession updates.
 
@@ -112,10 +130,14 @@ NBA live updates
 ⚠️ This stream provides LIVE SCORE UPDATES & PLAY-BY-PLAY only.
 ❌ No TV footage, no highlights, no copyrighted content.
 ✅ 100% original Scorzy scoreboard-based coverage.`,
+            description: `{Team A} vs {Team B} LIVE score updates and
 
             tags: [
                 `nba live score`,
-                `{Team A} vs {Team B} live score`
+                `{Team A} vs {Team B} live score`,
+                `{Team A} Basketball Live`,
+                `{Team B} Basketball Live`,
+                `{Team A} Vs {Team B}`
             ]
         };
 
