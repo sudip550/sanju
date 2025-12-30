@@ -179,21 +179,32 @@ function parseMatchLine(line, date) {
             leagueType = 'men';
         }
         
-        // Extract teams from the last part (format: "Team A @ Team B")
-        const teamsPart = parts[parts.length - 1];
-        const teamsMatch = teamsPart.match(/(.+?)\s*@\s*(.+)/);
-        
+        // Optional: detect a Stream Key segment (e.g. "Stream Key = Name") at the end
+        let streamKey = '';
+        let teamsPartIndex = parts.length - 1;
+        const lastPartLower = parts[parts.length - 1].toLowerCase();
+        if (lastPartLower.includes('stream key')) {
+            const keyMatch = parts[parts.length - 1].match(/stream\s*key\s*=?\s*(.+)/i);
+            if (keyMatch) streamKey = keyMatch[1].trim();
+            teamsPartIndex = parts.length - 2; // teams should be in the previous segment
+        }
+
+        // Extract teams from the determined part (format: "Team A @ Team B")
+        const teamsPart = parts[teamsPartIndex];
+        const teamsMatch = teamsPart ? teamsPart.match(/(.+?)\s*@\s*(.+)/) : null;
+
         if (!teamsMatch) return null;
-        
+
         const teamA = teamsMatch[1].trim();
         const teamB = teamsMatch[2].trim();
-        
+
         return {
             teamA,
             teamB,
             date,
             timeIST: timePart,
-            leagueType
+            leagueType,
+            streamKey
         };
     } catch (err) {
         console.error('Error parsing line:', line, err);
@@ -266,6 +277,20 @@ function displayBulkOutput(matches, templates, outputSection) {
             `;
             tagsContainer.appendChild(tagElement);
         });
+        
+        // If a stream key was provided, display it below the tags
+        if (match.streamKey) {
+            const skBox = document.createElement('div');
+            skBox.className = 'output-box';
+            skBox.innerHTML = `
+                <div class="output-header">
+                    <h3>🔑 Stream Key</h3>
+                    <button class="btn-copy" onclick="copyToClipboard('streamKeyOutput-${index}')">Copy</button>
+                </div>
+                <div id="streamKeyOutput-${index}" class="output-content">${match.streamKey}</div>
+            `;
+            matchContainer.appendChild(skBox);
+        }
     });
     
     // Show output section
